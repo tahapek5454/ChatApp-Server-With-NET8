@@ -1,5 +1,6 @@
 using ChatApp.API.Contexts;
 using ChatApp.API.Hubs;
+using ChatApp.API.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +29,7 @@ builder.Services.AddDbContext<ChatDbContext>(options =>
     options.UseSqlServer(builder.Configuration["MSSQL"]);
 });
 
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
