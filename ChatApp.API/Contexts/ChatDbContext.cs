@@ -10,7 +10,7 @@ namespace ChatApp.API.Contexts
             
         }
 
-        public DbSet<Client> Celints { get; set; }
+        public DbSet<Client> Clients { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Message> Messages { get; set; }
 

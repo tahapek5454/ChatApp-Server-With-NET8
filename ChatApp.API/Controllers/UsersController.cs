@@ -9,13 +9,14 @@ namespace ChatApp.API.Controllers
     [ApiController]
     public class UsersController(IUserService _userService) : ControllerBase
     {
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById([FromRoute] int id)
+        [HttpGet("{userName}")]
+        public async Task<IActionResult> GetByUsername([FromRoute] string userName)
         {
-            var response = await _userService.GetUserByIdAsync(id);
+            var response = await _userService.GetUserByUserName(userName);
 
             return Ok(response);
         }
+
 
         [HttpGet]
         public async Task<IActionResult> GetAll()

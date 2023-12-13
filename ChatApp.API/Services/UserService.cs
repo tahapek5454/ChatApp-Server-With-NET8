@@ -26,14 +26,14 @@ namespace ChatApp.API.Services
         public async Task<List<UserVM>> GetAllUserAsync()
             => await (_dbContext.Users.Select(x => new UserVM() { UserName = x.UserName, Email = x.Email })).ToListAsync();
 
-        public async Task<UserVM> GetUserByIdAsync(int id)
+        public async Task<UserVM> GetUserByUserName(string userName)
         {
-            var user = await _dbContext.Users.FindAsync(id);
+            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.UserName == userName);
 
             UserVM userVM = new()
             {
-                Email = user.Email,
-                UserName = user.UserName,
+                Email = user?.Email ?? "",
+                UserName = user?.UserName ?? "",
             };
 
             return userVM;
@@ -44,7 +44,7 @@ namespace ChatApp.API.Services
     public interface IUserService
     {
         Task<int> AddUserAsync(UserVM userVM);
-        Task<UserVM> GetUserByIdAsync(int id);
+        Task<UserVM> GetUserByUserName(string userName);
         Task<List<UserVM>> GetAllUserAsync();
     }
 }
