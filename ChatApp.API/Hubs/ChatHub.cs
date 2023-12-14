@@ -59,7 +59,14 @@ namespace ChatApp.API.Hubs
             await _dbContext.Messages.AddAsync(message);
             await _dbContext.SaveChangesAsync();
 
-            await Clients.Clients(toUser.Client.ConnectionId).SendAsync("receiveMessage", content, fromUser.UserName);
+            MessageVM messageVM = new MessageVM
+            {
+                Message = content,
+                From = fromUser.UserName,
+                To = toUser.UserName,
+            };
+
+            await Clients.Clients(toUser.Client.ConnectionId).SendAsync("receiveMessage", messageVM);
         }
     }
 }
