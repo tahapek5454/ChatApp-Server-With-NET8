@@ -30,6 +30,7 @@ builder.Services.AddDbContext<ChatDbContext>(options =>
 });
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IMessageService, MessageService>();
 
 var app = builder.Build();
 

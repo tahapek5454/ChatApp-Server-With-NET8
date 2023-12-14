@@ -52,8 +52,8 @@ namespace ChatApp.API.Hubs
             Message message = new Message()
             {
                 Content = content,
-                From = fromUser.Id,
-                To = toUser.Id
+                From = fromUser.UserName,
+                To = toUser.UserName
             };
 
             await _dbContext.Messages.AddAsync(message);
