@@ -1,5 +1,6 @@
 ﻿using ChatApp.API.Contexts;
 using ChatApp.API.Models;
+using ChatApp.API.ViewModels;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,7 +33,33 @@ namespace ChatApp.API.Hubs
                 await _dbContext.SaveChangesAsync();
             }
 
+
+            var users = await _dbContext.Users.Where(x => x.UserName != userName).Select(x => new UserVM()
+            {
+                Email = x.Email,
+                UserName = x.UserName,
+            }).ToListAsync();
+
             await Clients.All.SendAsync("clientJoined", userName);
+            await Clients.Caller.SendAsync("users", users);
+        }
+
+        public async Task SendMessage(string to, string content)
+        {
+            var toUser = await _dbContext.Users.Include(u => u.Client).FirstAsync(x => x.UserName == to);
+            var fromUser = await _dbContext.Users.Include(u => u.Client).FirstAsync(x => x.Client.ConnectionId == Context.ConnectionId);
+
+            Message message = new Message()
+            {
+                Content = content,
+                From = fromUser.Id,
+                To = toUser.Id
+            };
+
+            await _dbContext.Messages.AddAsync(message);
+            await _dbContext.SaveChangesAsync();
+
+            await Clients.Clients(toUser.Client.ConnectionId).SendAsync("receiveMessage", content, fromUser.UserName);
         }
     }
 }
