@@ -41,6 +41,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+if (app.Environment.IsProduction())
+{
+    var scope = app.Services.CreateScope();
+    var myDbContext = scope.ServiceProvider.GetRequiredService<ChatDbContext>();
+    myDbContext.Database.Migrate();
+}
+
 app.UseCors();
 
 app.UseHttpsRedirection();
