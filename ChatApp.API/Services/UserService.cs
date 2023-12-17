@@ -9,6 +9,13 @@ namespace ChatApp.API.Services
     {
         public async Task<int> AddUserAsync(UserVM userVM)
         {
+
+            var isExist = _dbContext.Users.Any(x => x.UserName == userVM.UserName);
+
+            if (isExist)
+                return -1;
+
+
             User user = new()
             {
                 Email = userVM.Email,

@@ -31,6 +31,9 @@ namespace ChatApp.API.Controllers
         {
             var id = await _userService.AddUserAsync(userVM);
 
+            if(id == -1)
+                return Ok(id);
+
             return Created($"/GetById/{id}", userVM);
         }
     }
